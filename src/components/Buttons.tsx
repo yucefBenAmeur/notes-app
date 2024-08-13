@@ -6,9 +6,23 @@ import PersonIcon from "@mui/icons-material/Person";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import HomeIcon from "@mui/icons-material/Home";
 import { useState } from "react";
+import { Note } from "./Body";
 
-const Buttons = () => {
+interface ButtonsProps {
+  notes: Note[];
+  setFilteredNotes: (notes: Note[]) => void;
+}
+
+const Buttons = ({ notes, setFilteredNotes }: ButtonsProps) => {
   const [value, setValue] = useState(0); // Initialize state with a default value
+
+  const handleFilter = (category: string) => {
+    if (category === "All") {
+      setFilteredNotes(notes);
+    } else {
+      setFilteredNotes(notes.filter((note) => note.category === category));
+    }
+  };
 
   return (
     <Box sx={{ width: 500 }}>
@@ -20,17 +34,25 @@ const Buttons = () => {
         }}
       >
         <BottomNavigationAction
+          onClick={() => handleFilter("All")}
           label="All"
-          color="success"
           icon={<DensitySmallIcon />}
         />
-        <BottomNavigationAction label="Personnel" icon={<PersonIcon />} />
         <BottomNavigationAction
+          onClick={() => handleFilter("personel")}
+          label="Personnel"
+          icon={<PersonIcon />}
+        />
+        <BottomNavigationAction
+          onClick={() => handleFilter("business")}
           label="Business"
-          color="success"
           icon={<ApartmentIcon />}
         />
-        <BottomNavigationAction label="Home" icon={<HomeIcon />} />
+        <BottomNavigationAction
+          onClick={() => handleFilter("home")}
+          label="Home"
+          icon={<HomeIcon />}
+        />
       </BottomNavigation>
     </Box>
   );

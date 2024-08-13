@@ -11,11 +11,18 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
+  p: 5,
 };
 
-const AddButton = () => {
+export interface AddNoteProps {
+  handleAddNote: (note: {
+    title: string;
+    text: string;
+    category: string;
+  }) => void;
+}
+
+const AddButton = ({ handleAddNote }: AddNoteProps) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,9 +48,9 @@ const AddButton = () => {
           <Typography id="modal-modal-title" variant="h5" component="h2">
             Add Your Note
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <Formm />
-          </Typography>
+          <Box sx={{ mt: 2 }}>
+            <Formm handleAddNote={handleAddNote} />
+          </Box>
         </Box>
       </Modal>
     </>

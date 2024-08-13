@@ -8,8 +8,36 @@ import {
   Radio,
   IconButton,
 } from "@mui/material";
+import { useState } from "react";
+import { AddNoteProps } from "./AddButton";
 
-export default function FormPropsTextFields() {
+const Formm = ({ handleAddNote }: AddNoteProps) => {
+  const [noteTitle, setNoteTitle] = useState<string>("");
+  const [noteText, setNoteText] = useState<string>("");
+  const [noteCategory, setNoteCategory] = useState<string>("");
+
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNoteTitle(event.target.value);
+  };
+
+  const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNoteText(event.target.value);
+  };
+
+  const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNoteCategory(event.target.value);
+  };
+
+  const handleSave = () => {
+    if (noteTitle && noteText && noteCategory) {
+      handleAddNote({
+        title: noteTitle,
+        text: noteText,
+        category: noteCategory,
+      });
+    }
+  };
+
   return (
     <Box
       component="form"
@@ -22,49 +50,51 @@ export default function FormPropsTextFields() {
       <div>
         <TextField
           required
+          onChange={handleChangeTitle}
           id="outlined-required"
+          value={noteTitle}
           label="TITLE"
-          defaultValue=""
         />
         <br />
         <TextField
           id="outlined-multiline-static"
           label="TEXT"
+          value={noteText}
+          onChange={handleChangeText}
           multiline
           rows={4}
-          defaultValue=""
         />
         <br />
-        <TextField
-          required
-          id="outlined-required"
-          label="DATE"
-          defaultValue=""
-        />
-        <br></br>
         <FormControl>
           <RadioGroup
             row
-            // aria-labelledby="demo-row-radio-buttons-group-label"
+            value={noteCategory}
+            onChange={handleChangeCategory}
             name="row-radio-buttons-group"
           >
             <FormControlLabel
-              value="personel"
+              value="personal"
               control={<Radio />}
-              label="personel"
+              label="Personal"
             />
             <FormControlLabel
-              value="Business"
+              value="business"
               control={<Radio />}
               label="Business"
             />
             <FormControlLabel value="home" control={<Radio />} label="Home" />
           </RadioGroup>
         </FormControl>
-        <IconButton size="large" className="position-absolute bottom-0 end-0">
+        <IconButton
+          size="large"
+          className="position-absolute bottom-0 end-0"
+          onClick={handleSave}
+        >
           <SaveIcon color="success" fontSize="inherit" />
         </IconButton>
       </div>
     </Box>
   );
-}
+};
+
+export default Formm;

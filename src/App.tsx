@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-
 import Body from "./components/Body";
 
 function App() {
@@ -15,7 +14,7 @@ function App() {
         }}
       >
         <Box sx={{ gridArea: "main" }}>
-          <Body></Body>
+          <Body />
         </Box>
       </Box>
     </>
