@@ -1,3 +1,5 @@
+import { useFormik } from "formik";
+import * as yup from "yup";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import SaveIcon from "@mui/icons-material/Save";
@@ -8,39 +10,35 @@ import {
   Radio,
   IconButton,
 } from "@mui/material";
-import { useState } from "react";
 import { AddNoteProps } from "./AddButton";
 
+const validationSchema = yup.object({
+  title: yup.string().required("Title is required"),
+  text: yup.string().required("Text is required"),
+  category: yup.string().required("Category is required"),
+});
+
 const Formm = ({ handleAddNote }: AddNoteProps) => {
-  const [noteTitle, setNoteTitle] = useState<string>("");
-  const [noteText, setNoteText] = useState<string>("");
-  const [noteCategory, setNoteCategory] = useState<string>("");
-
-  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteTitle(event.target.value);
-  };
-
-  const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteText(event.target.value);
-  };
-
-  const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNoteCategory(event.target.value);
-  };
-
-  const handleSave = () => {
-    if (noteTitle && noteText && noteCategory) {
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+      text: "",
+      category: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
       handleAddNote({
-        title: noteTitle,
-        text: noteText,
-        category: noteCategory,
+        title: values.title,
+        text: values.text,
+        category: values.category,
       });
-    }
-  };
+    },
+  });
 
   return (
     <Box
       component="form"
+      onSubmit={formik.handleSubmit}
       sx={{
         "& .MuiTextField-root": { m: 1, width: "35ch" },
       }}
@@ -49,28 +47,29 @@ const Formm = ({ handleAddNote }: AddNoteProps) => {
     >
       <div>
         <TextField
-          required
-          onChange={handleChangeTitle}
           id="outlined-required"
-          value={noteTitle}
           label="TITLE"
+          {...formik.getFieldProps("title")}
+          error={formik.touched.title && Boolean(formik.errors.title)}
+          helperText={formik.touched.title && formik.errors.title}
         />
         <br />
         <TextField
           id="outlined-multiline-static"
           label="TEXT"
-          value={noteText}
-          onChange={handleChangeText}
           multiline
           rows={4}
+          {...formik.getFieldProps("text")}
+          error={formik.touched.text && Boolean(formik.errors.text)}
+          helperText={formik.touched.text && formik.errors.text}
         />
         <br />
-        <FormControl>
+        <FormControl component="fieldset">
           <RadioGroup
             row
-            value={noteCategory}
-            onChange={handleChangeCategory}
-            name="row-radio-buttons-group"
+            name="category"
+            value={formik.values.category}
+            onChange={formik.handleChange}
           >
             <FormControlLabel
               value="personal"
@@ -84,11 +83,14 @@ const Formm = ({ handleAddNote }: AddNoteProps) => {
             />
             <FormControlLabel value="home" control={<Radio />} label="Home" />
           </RadioGroup>
+          {formik.touched.category && formik.errors.category && (
+            <div style={{ color: "red" }}>{formik.errors.category}</div>
+          )}
         </FormControl>
         <IconButton
+          type="submit"
           size="large"
           className="position-absolute bottom-0 end-0"
-          onClick={handleSave}
         >
           <SaveIcon color="success" fontSize="inherit" />
         </IconButton>

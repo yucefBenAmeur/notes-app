@@ -58,6 +58,9 @@ const Body = () => {
       date: date.toLocaleDateString(),
       id: nanoid(),
     };
+    // setNotes([...notes, 2, newNote]);
+    // setNotes([...notes, 1, newNote]);
+
     setNotes((prevNotes) => [...prevNotes, newNote]);
     setFilteredNotes((prevNotes) => [...prevNotes, newNote]);
   };

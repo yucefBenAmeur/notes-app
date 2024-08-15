@@ -26,9 +26,9 @@ const CardList = ({ notes, handleDeleteNote }: CardListProps) => {
           {notes.map((note) => (
             <Notes
               handleDeleteNote={handleDeleteNote}
-              key={note.id} // Added key prop
-              title={note.title}
-              text={note.text}
+              key={note?.id || 0} // Added key prop
+              title={note?.title || "simple title"}
+              text={note?.text || "simple text"}
               category={note.category}
               date={note.date}
               id={note.id}
