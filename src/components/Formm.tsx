@@ -11,7 +11,17 @@ import {
   IconButton,
 } from "@mui/material";
 import { AddNoteProps } from "./AddButton";
-
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  p: 5,
+};
+// Validation schema
 const validationSchema = yup.object({
   title: yup.string().required("Title is required"),
   text: yup.string().required("Text is required"),
@@ -27,11 +37,8 @@ const Formm = ({ handleAddNote }: AddNoteProps) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      handleAddNote({
-        title: values.title,
-        text: values.text,
-        category: values.category,
-      });
+      handleAddNote(values);
+      formik.resetForm();
     },
   });
 
@@ -40,23 +47,23 @@ const Formm = ({ handleAddNote }: AddNoteProps) => {
       component="form"
       onSubmit={formik.handleSubmit}
       sx={{
-        "& .MuiTextField-root": { m: 1, width: "35ch" },
+        style,
       }}
       noValidate
       autoComplete="off"
     >
       <div>
         <TextField
-          id="outlined-required"
-          label="TITLE"
+          id="title"
+          label="Title"
           {...formik.getFieldProps("title")}
           error={formik.touched.title && Boolean(formik.errors.title)}
           helperText={formik.touched.title && formik.errors.title}
         />
         <br />
         <TextField
-          id="outlined-multiline-static"
-          label="TEXT"
+          id="text"
+          label="Text"
           multiline
           rows={4}
           {...formik.getFieldProps("text")}

@@ -1,58 +1,43 @@
-import Box from "@mui/material/Box";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import { Box, BottomNavigation, BottomNavigationAction } from "@mui/material";
 import DensitySmallIcon from "@mui/icons-material/DensitySmall";
 import PersonIcon from "@mui/icons-material/Person";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import HomeIcon from "@mui/icons-material/Home";
-import { useState } from "react";
-import { Note } from "./Body";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../store/store";
+import { setFilter } from "../store/notesSlice";
 
-interface ButtonsProps {
-  notes: Note[];
-  setFilteredNotes: (notes: Note[]) => void;
-}
-
-const Buttons = ({ notes, setFilteredNotes }: ButtonsProps) => {
-  const [value, setValue] = useState(0); // Initialize state with a default value
+const Buttons = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const filter = useSelector((state: RootState) => state.notes.filter);
 
   const handleFilter = (category: string) => {
-    if (category === "All") {
-      setFilteredNotes(notes);
-    } else {
-      setFilteredNotes(notes.filter((note) => note.category === category));
-    }
+    dispatch(setFilter(category));
   };
 
   return (
     <Box sx={{ width: 500 }}>
       <BottomNavigation
         showLabels
-        value={value}
-        onChange={(_, newValue) => {
-          setValue(newValue);
-        }}
+        value={filter}
+        onChange={(_, newValue) => handleFilter(newValue)}
       >
         <BottomNavigationAction
-          onClick={() => handleFilter("All")}
           label="All"
+          value="All"
           icon={<DensitySmallIcon />}
         />
         <BottomNavigationAction
-          onClick={() => handleFilter("personel")}
-          label="Personnel"
+          label="Personal"
+          value="personal"
           icon={<PersonIcon />}
         />
         <BottomNavigationAction
-          onClick={() => handleFilter("business")}
           label="Business"
+          value="business"
           icon={<ApartmentIcon />}
         />
-        <BottomNavigationAction
-          onClick={() => handleFilter("home")}
-          label="Home"
-          icon={<HomeIcon />}
-        />
+        <BottomNavigationAction label="Home" value="home" icon={<HomeIcon />} />
       </BottomNavigation>
     </Box>
   );

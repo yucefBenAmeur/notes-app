@@ -1,10 +1,9 @@
 import { Card, CardContent, IconButton } from "@mui/material";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Note } from "./Body";
+import { Note } from "../store/notesSlice";
 
-export interface NotesProps extends Note {
-  handleDeleteNote: (note: { id: string }) => void;
+interface NotesProps extends Note {
+  handleDeleteNote: (note: { id: string }) => void; // Ensure this type matches the usage
 }
 
 const Notes = ({
@@ -16,7 +15,7 @@ const Notes = ({
   handleDeleteNote,
 }: NotesProps) => {
   let backgroundColor = "";
-  if (category === "personel") {
+  if (category === "personal") {
     backgroundColor = "orange";
   } else if (category === "business") {
     backgroundColor = "lightBlue";
@@ -27,8 +26,8 @@ const Notes = ({
 
   return (
     <Card
-      className="m-3   bg-primary text-white"
-      sx={{ maxWidth: 500, minWidth: 500, maxHeight: 250 }}
+      className="m-3 bg-primary text-white"
+      sx={{ maxWidth: 500, minWidth: 500, margin: 3 }}
     >
       <CardContent sx={{ backgroundColor, color }}>
         <h3>{title}</h3>
@@ -39,12 +38,10 @@ const Notes = ({
           aria-label="delete"
           color="error"
           size="large"
+          className="position-relative"
           onClick={() => handleDeleteNote({ id })}
         >
           <DeleteIcon fontSize="inherit" />
-        </IconButton>
-        <IconButton size="large">
-          <ModeEditIcon fontSize="inherit" />
         </IconButton>
       </CardContent>
     </Card>

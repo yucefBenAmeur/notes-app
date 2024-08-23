@@ -1,6 +1,6 @@
 import { Divider, Grid, Stack } from "@mui/material";
-import { Note } from "./Body";
 import Notes from "./Notes";
+import { Note } from "../store/notesSlice";
 
 interface CardListProps {
   notes: Note[];
@@ -19,16 +19,16 @@ const CardList = ({ notes, handleDeleteNote }: CardListProps) => {
         <Grid
           container
           spacing={5}
-          rowSpacing={5}
+          rowSpacing={2}
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           className="m-3"
         >
           {notes.map((note) => (
             <Notes
               handleDeleteNote={handleDeleteNote}
-              key={note?.id || 0} // Added key prop
-              title={note?.title || "simple title"}
-              text={note?.text || "simple text"}
+              key={note.id}
+              title={note.title}
+              text={note.text}
               category={note.category}
               date={note.date}
               id={note.id}
